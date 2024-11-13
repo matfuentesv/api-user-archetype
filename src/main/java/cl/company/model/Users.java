@@ -1,38 +1,66 @@
 package cl.company.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @Table(name = "Users")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(name = "username")
-    @NotBlank(message = "No puede ingresar un username vacio")
-    @NotNull(message = "No puede ingresar un username nulo")
+    @Column(name = "username", nullable = false)
     private String username;
 
-
-    @Column(name = "email")
-    @NotBlank(message = "No puede email un username vacio")
-    @NotNull(message = "No puede email un username nulo")
-    private String email;
-
-    @Column(name = "password")
-    @NotBlank(message = "No puede email un password vacio")
-    @NotNull(message = "No puede email un password nulo")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "rol_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
     private Rol rol;
 
+    private Users(Builder builder) {
+        this.id = builder.id;
+        this.username = builder.username;
+        this.password = builder.password;
+        this.rol = builder.rol;
+    }
 
+    public static class Builder {
+        private Long id;
+        private String username;
+        private String password;
+        private Rol rol;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder rol(Rol rol) {
+            this.rol = rol;
+            return this;
+        }
+
+        public Users build() {
+            return new Users(this);
+        }
+    }
 }

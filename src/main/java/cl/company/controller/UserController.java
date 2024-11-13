@@ -69,35 +69,32 @@ public class UserController {
 
     @PostMapping("/createUser")
     public ResponseEntity<Object> createUser(@Valid @RequestBody Users users, BindingResult bindingResult) throws MethodArgumentNotValidException {
-        log.info("Creando nuevo usuario.");
 
         if (users == null) {
-            log.warning("Algunos de los parámetros del usuario no se ingresaron.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron", false));
+            log.info("Algunos de los parámetros no se ingresaron");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron",false));
         }
 
         if (bindingResult.hasErrors()) {
-            log.warning("Errores de validación al crear el usuario.");
-            throw new MethodArgumentNotValidException(null, bindingResult);
+            throw new IllegalArgumentException("Error en los argumentos del método.");
         }
 
-        Users createdUser = userService.createUser(users);
-        log.log(Level.INFO, "Usuario creado exitosamente: {0}", createdUser.getUsername());
-        return ResponseEntity.ok(createdUser);
+        return ResponseEntity.ok(userService.createUser(users));
     }
 
     @PutMapping("/updateUser")
     public ResponseEntity<Object> updateUser(@Valid @RequestBody Users users, BindingResult bindingResult) throws MethodArgumentNotValidException {
-        log.log(Level.INFO, "Actualizando usuario con ID: {0}", users.getId());
 
-        if (bindingResult.hasErrors()) {
-            log.warning("Errores de validación al actualizar el usuario.");
-            throw new MethodArgumentNotValidException(null, bindingResult);
+        if (users == null) {
+            log.info("Algunos de los parámetros no se ingresaron");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron",false));
         }
 
-        Users updatedUser = userService.createUser(users);
-        log.log(Level.INFO, "Usuario actualizado exitosamente: {0}", updatedUser.getUsername());
-        return ResponseEntity.ok(updatedUser);
+        if (bindingResult.hasErrors()) {
+            throw new IllegalArgumentException("Error en los argumentos del método.");
+        }
+
+        return ResponseEntity.ok(userService.updateUser(users));
     }
 
     @DeleteMapping("/deleteUser/{id}")
