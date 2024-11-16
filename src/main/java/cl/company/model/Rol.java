@@ -1,55 +1,56 @@
 package cl.company.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
 @Entity
 @Table(name = "Rol")
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
+    @NotBlank(message = "No puede ingresar un name de rol vacio")
+    @NotNull(message = "No puede ingresar un name de rol nulo")
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
+    @NotBlank(message = "No puede ingresar una description de rol vacio")
+    @NotNull(message = "No puede ingresar una description de rol nulo")
     private String description;
 
-    private Rol(Builder builder) {
-        this.id = builder.id;
-        this.name = builder.name;
-        this.description = builder.description;
+    // Constructor público requerido por JPA
+    public Rol() {}
+
+    // Constructor privado para el Builder
+    private Rol(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
+    // Builder interno
     public static class Builder {
-        private Long id;
         private String name;
         private String description;
 
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder name(String name) {
+        public Builder withNombre(String name) {
             this.name = name;
             return this;
         }
 
-        public Builder description(String description) {
+        public Builder withDescription(String description) {
             this.description = description;
             return this;
         }
 
         public Rol build() {
-            return new Rol(this);
+            return new Rol(name, description);
         }
     }
 }

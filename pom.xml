@@ -10,7 +10,7 @@
     <groupId>cl.company</groupId>
     <artifactId>api-user-archetype</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>api-user-archetype</name>
     <url>maven.apache.org</url>
     <properties>

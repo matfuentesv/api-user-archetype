@@ -1,66 +1,85 @@
 package cl.company.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
 @Entity
 @Table(name = "Users")
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
+    @NotBlank(message = "No puede ingresar un username vacio")
+    @NotNull(message = "No puede ingresar un username nulo")
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "email")
+    @NotBlank(message = "No puede email un username vacio")
+    @NotNull(message = "No puede email un username nulo")
+    private String email;
+
+    @Column(name = "password")
+    @NotBlank(message = "No puede password un password vacio")
+    @NotNull(message = "No puede password un password nulo")
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
     private Rol rol;
 
-    private Users(Builder builder) {
-        this.id = builder.id;
-        this.username = builder.username;
-        this.password = builder.password;
-        this.rol = builder.rol;
+    // Constructor público requerido por JPA
+    public Users() {}
+
+    // Constructor privado para el Builder
+    private Users(Long id,String username, String email, String password, Rol rol) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
     }
 
+    // Builder interno
     public static class Builder {
         private Long id;
         private String username;
+        private String email;
         private String password;
         private Rol rol;
 
-        public Builder id(Long id) {
+        public Builder withId(Long id) {
             this.id = id;
             return this;
         }
 
-        public Builder username(String username) {
+        public Builder withUsername(String username) {
             this.username = username;
             return this;
         }
 
-        public Builder password(String password) {
+        public Builder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder withPassword(String password) {
             this.password = password;
             return this;
         }
 
-        public Builder rol(Rol rol) {
+        public Builder withRol(Rol rol) {
             this.rol = rol;
             return this;
         }
 
         public Users build() {
-            return new Users(this);
+            return new Users(id,username, email, password, rol);
         }
     }
 }

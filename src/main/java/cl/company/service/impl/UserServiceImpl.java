@@ -47,24 +47,27 @@ public class UserServiceImpl implements UserService {
 
         if(!existsProductByName(user.getUsername())){
             Users userToSave = new Users.Builder()
-                                        .username(user.getUsername())
-                                        .password(user.getPassword())
-                                        .rol(user.getRol())
+                                        .withUsername(user.getUsername())
+                                        .withPassword(user.getPassword())
+                                        .withEmail(user.getEmail())
+                                        .withRol(user.getRol())
                                         .build();
             Users createdUser = userRepository.save(userToSave);
             return ResponseEntity.ok(createdUser);
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("No se puedo actualizar el usuario,no existe",false));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("No se puedo crear el usuario,ya existe",false));
         }
     }
 
     @Override
     public ResponseEntity<Object> updateUser(Users users) {
-        if(existsProductByName(users.getUsername())){
+        if(existsUserById(users.getId())){
             Users userToSave = new Users.Builder()
-                                    .username(users.getUsername())
-                                    .password(users.getPassword())
-                                    .rol(users.getRol())
+                                    .withId(users.getId())
+                                    .withUsername(users.getUsername())
+                                    .withPassword(users.getPassword())
+                                    .withEmail(users.getEmail())
+                                    .withRol(users.getRol())
                                     .build();
             Users createdUser = userRepository.save(userToSave);
             return ResponseEntity.ok(createdUser);
