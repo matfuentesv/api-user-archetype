@@ -22,8 +22,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public ApiResponse login(String username, String password) {
-        final boolean existUser = userRepository.findByUserPassword(username,password).isPresent();
+    public ApiResponse login(String email, String password) {
+        final boolean existUser = userRepository.findByEmailñPassword(email,password).isPresent();
         if(existUser){
             return new ApiResponse("Usuario logeado",true);
         }else {

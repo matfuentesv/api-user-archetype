@@ -27,14 +27,14 @@ public class UserController {
     UserService userService;
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse> login(@RequestHeader String username, @RequestHeader String password) {
-        log.log(Level.INFO, "Iniciando sesión para el usuario: {0}", username);
+    public ResponseEntity<ApiResponse> login(@RequestHeader String email, @RequestHeader String password) {
+        log.log(Level.INFO, "Iniciando sesión para el usuario: {0}", email);
 
-        ApiResponse response = userService.login(username, password);
+        ApiResponse response = userService.login(email, password);
         if (response.isSuccess()) {
-            log.log(Level.INFO, "Usuario {0} inició sesión correctamente", username);
+            log.log(Level.INFO, "Usuario {0} inició sesión correctamente", email);
         } else {
-            log.log(Level.WARNING, "Fallo de inicio de sesión para el usuario: {0}", username);
+            log.log(Level.WARNING, "Fallo de inicio de sesión para el usuario: {0}", email);
         }
 
          return ResponseEntity.ok(response);
