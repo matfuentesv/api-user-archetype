@@ -37,20 +37,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Users findUser(Long id) {
-        Optional<Users> userOptional = userRepository.findById(id);
+    public Users findUser(String email) {
+        Optional<Users> userOptional = userRepository.findUserEmail(email);
         return userOptional.orElseGet(() -> new Users.Builder().build());
     }
 
     @Override
-    public ResponseEntity<Object> createUser(Users user) {
+    public ResponseEntity<Object> createUser(Users users) {
 
-        if(!existsProductByName(user.getUsername())){
+        if(!existsProductByName(users.getEmail())){
             Users userToSave = new Users.Builder()
-                                        .withUsername(user.getUsername())
-                                        .withPassword(user.getPassword())
-                                        .withEmail(user.getEmail())
-                                        .withRol(user.getRol())
+                                        .withFirstName(users.getFirstName())
+                                        .withLastName(users.getLastName())
+                                        .withRut(users.getRut())
+                                        .withEmail(users.getEmail())
+                                        .withPhone(users.getPhone())
+                                        .withAddress(users.getAddress())
+                                        .withPassword(users.getPassword())
+                                        .withRol(users.getRol())
                                         .build();
             Users createdUser = userRepository.save(userToSave);
             return ResponseEntity.ok(createdUser);
@@ -64,9 +68,13 @@ public class UserServiceImpl implements UserService {
         if(existsUserById(users.getId())){
             Users userToSave = new Users.Builder()
                                     .withId(users.getId())
-                                    .withUsername(users.getUsername())
-                                    .withPassword(users.getPassword())
+                                    .withFirstName(users.getFirstName())
+                                    .withLastName(users.getLastName())
+                                    .withRut(users.getRut())
                                     .withEmail(users.getEmail())
+                                    .withPhone(users.getPhone())
+                                    .withAddress(users.getAddress())
+                                    .withPassword(users.getPassword())
                                     .withRol(users.getRol())
                                     .build();
             Users createdUser = userRepository.save(userToSave);
@@ -87,12 +95,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<Object> deleteUser(Long id) {
-        if (!existsUserById(id)) {
-            log.info("No se puede eliminar el usuario, no existe");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("El usuario no existe",false));
+    public ResponseEntity<Object> deleteUser(String email) {
+        Optional<Users> userOptional = userRepository.findUserEmail(email);
+        if(userOptional.isPresent()){
+            Users user = userOptional.get();
+            userRepository.deleteById(user.getId());
+            return ResponseEntity.ok("Eliminación exitosa");
+        }else {
+            return ResponseEntity.badRequest().build();
         }
-        userRepository.deleteById(id);
-        return ResponseEntity.ok("Eliminación exitosa");
+
+
     }
 }

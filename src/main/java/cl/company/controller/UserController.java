@@ -21,6 +21,7 @@ import java.util.logging.Level;
 @RestController
 @RequestMapping("/api")
 @Log
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
     @Autowired
@@ -48,71 +49,65 @@ public class UserController {
         return ResponseEntity.ok(usersList);
     }
 
-    @GetMapping("/findUser/{id}")
-    public ResponseEntity<Object> findUser(@PathVariable Long id) {
-        log.log(Level.INFO, "Buscando usuario con ID: {0}", id);
+    @GetMapping("/findUser/{email}")
+    public ResponseEntity<Object> findUser(@PathVariable String email) {
+        log.log(Level.INFO, "Buscando usuario con ID: {0}", email);
 
-        if (StringUtils.containsWhitespace(String.valueOf(id)) || id == null) {
+        if (StringUtils.containsWhitespace(String.valueOf(email)) || email == null) {
             log.warning("El ID no es válido o está vacío.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("El ID no es válido o está vacío.", false));
         }
 
-        Users user = userService.findUser(id);
+        Users user = userService.findUser(email);
         if (user != null) {
-            log.log(Level.INFO, "Usuario encontrado: {0}", user.getUsername());
+
             return ResponseEntity.ok(user);
         } else {
-            log.log(Level.WARNING, "Usuario no encontrado con ID: {0}", id);
+            log.log(Level.WARNING, "Usuario no encontrado con ID: {0}", email);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Usuario no encontrado", false));
         }
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody Users users, BindingResult bindingResult) throws MethodArgumentNotValidException {
+    public ResponseEntity<Object> createUser( @RequestBody Users users) throws MethodArgumentNotValidException {
 
         if (users == null) {
             log.info("Algunos de los parámetros no se ingresaron");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron",false));
         }
 
-        if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Error en los argumentos del método.");
-        }
+
 
         return ResponseEntity.ok(userService.createUser(users));
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<Object> updateUser(@Valid @RequestBody Users users, BindingResult bindingResult) throws MethodArgumentNotValidException {
+    public ResponseEntity<Object> updateUser(@RequestBody Users users) throws MethodArgumentNotValidException {
 
         if (users == null) {
             log.info("Algunos de los parámetros no se ingresaron");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron",false));
         }
 
-        if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException("Error en los argumentos del método.");
-        }
-
         return ResponseEntity.ok(userService.updateUser(users));
     }
 
-    @DeleteMapping("/deleteUser/{id}")
-    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
-        log.log(Level.INFO, "Intentando eliminar usuario con ID: {0}", id);
+    @DeleteMapping("/deleteUser/{email}")
+    public ResponseEntity<Object> deleteUser(@PathVariable String email) {
+        log.log(Level.INFO, "Intentando eliminar usuario con ID: {0}", email);
 
-        if (StringUtils.containsWhitespace(String.valueOf(id)) || id == null) {
+        if (StringUtils.containsWhitespace(String.valueOf(email)) || email == null) {
             log.warning("El ID no es válido o está vacío.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("El ID no es válido o está vacío.", false));
         }
 
-        Users user = userService.findUser(id);
-        if (user != null && user.getUsername() != null) {
-            userService.deleteUser(id);
-            log.log(Level.INFO, "Usuario con ID: {0} eliminado exitosamente.", id);
+        Users user = userService.findUser(email);
+        if (user != null && user.getEmail() != null) {
+            userService.deleteUser(email);
+            log.log(Level.INFO, "Usuario con ID: {0} eliminado exitosamente.", email);
             return ResponseEntity.ok(new ApiResponse("Usuario eliminado", true));
         } else {
-            log.log(Level.WARNING, "Usuario no encontrado con ID: {0}", id);
+            log.log(Level.WARNING, "Usuario no encontrado con ID: {0}", email);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Usuario no encontrado", false));
         }
     }
