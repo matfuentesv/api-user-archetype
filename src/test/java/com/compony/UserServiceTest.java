@@ -14,7 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class UserServiceImplTest {
+public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -159,4 +159,6 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).findUserEmail(email);
         verify(userRepository, never()).deleteById(anyLong());
     }
+
+
 }
