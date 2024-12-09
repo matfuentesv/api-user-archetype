@@ -8,7 +8,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AppTest {
 
     @Test
-    void contextLoads() {
-        // Esta prueba verifica que el contexto de la aplicación Spring se carga correctamente
-    }
+    void contextLoads() {}
 }

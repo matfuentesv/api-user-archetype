@@ -10,13 +10,13 @@ public class ModelTests {
 
     @Test
     void testUsersModelBuilder() {
-        // Create a Role object
+
         Rol role = new Rol.Builder()
                 .withNombre("Admin")
                 .withDescription("Administrator role")
                 .build();
 
-        // Create a Users object
+
         Users user = new Users.Builder()
                 .withFirstName("John")
                 .withLastName("Doe")
@@ -27,7 +27,7 @@ public class ModelTests {
                 .withRol(role)
                 .build();
 
-        // Assertions for Users
+
         assertEquals("John", user.getFirstName());
         assertEquals("Doe", user.getLastName());
         assertEquals("johndoe@example.com", user.getEmail());
@@ -85,26 +85,84 @@ public class ModelTests {
         assertNotEquals(user1.hashCode(), user3.hashCode());
     }
 
-//    @Test
-//    void testToString() {
-//        Users user = new Users();
-//        user.setFirstName("John");
-//        user.setLastName("Doe");
-//
-//        String expected = "Users{firstName='John', lastName='Doe'}"; // Ajustar según implementación
-//        assertEquals(expected, user.toString());
-//    }
+
 
     @Test
     void testRolModel() {
-        // Create a Role object
+
         Rol role = new Rol.Builder()
                 .withNombre("User")
                 .withDescription("Regular user role")
                 .build();
 
-        // Assertions for Role
+
         assertEquals("User", role.getName());
         assertEquals("Regular user role", role.getDescription());
     }
+
+    @Test
+    void testEquals() {
+        Rol role1 = new Rol();
+        role1.setId(1L);
+        role1.setName("Admin");
+        role1.setDescription("Administrator role");
+
+        Rol role2 = new Rol();
+        role2.setId(1L);
+        role2.setName("Admin");
+        role2.setDescription("Administrator role");
+
+        Rol role3 = new Rol();
+        role3.setId(2L);
+        role3.setName("User");
+        role3.setDescription("Regular user role");
+
+        assertEquals(role1, role2);
+        assertNotEquals(role1, role3);
+    }
+
+    @Test
+    void testHashCode() {
+        Rol role1 = new Rol();
+        role1.setId(1L);
+        role1.setName("Admin");
+        role1.setDescription("Administrator role");
+
+        Rol role2 = new Rol();
+        role2.setId(1L);
+        role2.setName("Admin");
+        role2.setDescription("Administrator role");
+
+        Rol role3 = new Rol();
+        role3.setId(2L);
+        role3.setName("User");
+        role3.setDescription("Regular user role");
+
+        assertEquals(role1.hashCode(), role2.hashCode());
+        assertNotEquals(role1.hashCode(), role3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        Rol role = new Rol();
+        role.setId(1L);
+        role.setName("Admin");
+        role.setDescription("Administrator role");
+
+        String expected = "Rol(id=1, name=Admin, description=Administrator role)";
+        assertEquals(expected, role.toString());
+    }
+
+    @Test
+    void testSettersAndGetters() {
+        Rol role = new Rol();
+
+        role.setId(1L);
+        role.setDescription("Administrator role");
+
+        assertEquals(1L, role.getId());
+        assertEquals("Administrator role", role.getDescription());
+    }
+
+
 }

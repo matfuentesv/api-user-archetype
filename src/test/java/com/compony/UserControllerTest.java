@@ -114,13 +114,13 @@ class UserControllerTest {
 
     @Test
     void createUser_Successful() {
-        // Crear un rol de ejemplo
+
         Rol role = new Rol.Builder()
                 .withNombre("User")
                 .withDescription("Regular user role")
                 .build();
 
-        // Crear un usuario de ejemplo
+
         Users user = new Users.Builder()
                 .withFirstName("New")
                 .withLastName("User")
@@ -132,31 +132,31 @@ class UserControllerTest {
                 .withRol(role)
                 .build();
 
-        // Simular la respuesta del servicio
+
         when(userService.createUser(user)).thenReturn(user);
 
-        // Llamar al método del controlador
+
         Users result = userController.createUser(user);
 
-        // Verificaciones
-        assertNotNull(result); // Verifica que la respuesta no sea nula
-        assertEquals(user.getEmail(), result.getEmail()); // Verifica que los correos coincidan
-        assertEquals(user.getFirstName(), result.getFirstName()); // Verifica que los nombres coincidan
-        assertEquals(user.getLastName(), result.getLastName()); // Verifica que los apellidos coincidan
-        verify(userService, times(1)).createUser(user); // Verifica que el servicio fue llamado una vez
+
+        assertNotNull(result);
+        assertEquals(user.getEmail(), result.getEmail());
+        assertEquals(user.getFirstName(), result.getFirstName());
+        assertEquals(user.getLastName(), result.getLastName());
+        verify(userService, times(1)).createUser(user);
     }
 
 
 
     @Test
     void updateUser_Successful() {
-        // Crear un rol de ejemplo
+
         Rol role = new Rol.Builder()
                 .withNombre("User")
                 .withDescription("Regular user role")
                 .build();
 
-        // Crear un usuario existente de ejemplo
+
         Users existingUser = new Users.Builder()
                 .withId(1L)
                 .withFirstName("Existing")
@@ -169,7 +169,7 @@ class UserControllerTest {
                 .withRol(role)
                 .build();
 
-        // Crear un usuario actualizado de ejemplo
+
         Users updatedUser = new Users.Builder()
                 .withId(1L)
                 .withFirstName("Updated")
@@ -182,13 +182,13 @@ class UserControllerTest {
                 .withRol(role)
                 .build();
 
-        // Simular el comportamiento del servicio
+
         when(userService.updateUser(existingUser)).thenReturn(updatedUser);
 
-        // Llamar al método del controlador
+
         Users result = userController.updateUser(existingUser);
 
-        // Verificaciones
+
         assertNotNull(result);
         assertEquals(updatedUser.getId(), result.getId());
         assertEquals(updatedUser.getFirstName(), result.getFirstName());
@@ -197,23 +197,9 @@ class UserControllerTest {
         assertEquals(updatedUser.getAddress(), result.getAddress());
         assertEquals(updatedUser.getPassword(), result.getPassword());
 
-        // Verificar que el servicio fue llamado una vez
+
         verify(userService, times(1)).updateUser(existingUser);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Test
@@ -236,26 +222,26 @@ class UserControllerTest {
                 .withRol(role)
                 .build();
 
-        // Crear la respuesta esperada
+
         ApiResponse expectedResponse = new ApiResponse("Usuario eliminado", true);
 
-        // Simular el comportamiento del servicio
+
         when(userService.findUser(email)).thenReturn(mockUser);
         doReturn(ResponseEntity.ok(expectedResponse)).when(userService).deleteUser(email);
 
-        // Llamar al método del controlador
+
         ResponseEntity<Object> result = userController.deleteUser(email);
 
-        // Verificaciones
-        assertNotNull(result);
-        assertEquals(200, result.getStatusCodeValue()); // Verifica el código HTTP
 
-        // Verificar el cuerpo de la respuesta
+        assertNotNull(result);
+        assertEquals(200, result.getStatusCodeValue());
+
+
         ApiResponse actualResponse = (ApiResponse) result.getBody();
         assertNotNull(actualResponse);
-        assertEquals(expectedResponse, actualResponse); // Compara el objeto completo
+        assertEquals(expectedResponse, actualResponse);
 
-        // Verifica que los métodos del servicio fueron llamados
+
         verify(userService, times(1)).findUser(email);
         verify(userService, times(1)).deleteUser(email);
     }

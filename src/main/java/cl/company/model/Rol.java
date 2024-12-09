@@ -25,17 +25,17 @@ public class Rol {
     @NotNull(message = "No puede ingresar una description de rol nulo")
     private String description;
 
-    // Constructor público requerido por JPA
+
     public Rol() {}
 
-    // Constructor privado para el Builder
+
     private Rol(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    // Builder interno
+
     public static class Builder {
         private Long  id;
         private String name;
