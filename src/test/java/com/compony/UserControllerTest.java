@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
@@ -111,56 +112,110 @@ class UserControllerTest {
         verify(userService, times(1)).findUser(email);
     }
 
-//    @Test
-//    void createUser_Successful() {
-//        Rol role = new Rol.Builder().withNombre("User").withDescription("Regular user role").build();
-//        Users user = new Users.Builder()
-//                .withFirstName("New")
-//                .withLastName("User")
-//                .withEmail("newuser@example.com")
-//                .withRut("12345678-9")
-//                .withPhone("9876543210")
-//                .withAddress("New Address")
-//                .withRol(role)
-//                .build();
-//
-//        ApiResponse response = new ApiResponse("User created", true);
-//
-//        when(userService.createUser(user)).thenReturn(response);
-//
-//        ResponseEntity<Object> result = userController.createUser(user);
-//
-//        assertNotNull(result);
-//        assertEquals(200, result.getStatusCodeValue());
-//        assertTrue(((ApiResponse) result.getBody()).isSuccess());
-//        verify(userService, times(1)).createUser(user);
-//    }
+    @Test
+    void createUser_Successful() {
+        // Crear un rol de ejemplo
+        Rol role = new Rol.Builder()
+                .withNombre("User")
+                .withDescription("Regular user role")
+                .build();
 
-    //    @Test
-//    void updateUser_Successful() {
-//        Rol role = new Rol.Builder().withNombre("User").withDescription("Regular user role").build();
-//        Users user = new Users.Builder()
-//                .withFirstName("Existing")
-//                .withLastName("User")
-//                .withEmail("existinguser@example.com")
-//                .withRut("12345678-9")
-//                .withPhone("9876543210")
-//                .withAddress("Existing Address")
-//                .withRol(role)
-//                .build();
-//
-//        ApiResponse response = new ApiResponse("User updated", true);
-//
-//        when(userService.updateUser(user)).thenReturn(response);
-//
-//        ResponseEntity<Object> result = userController.updateUser(user);
-//
-//        assertNotNull(result);
-//        assertEquals(200, result.getStatusCodeValue());
-//        assertTrue(((ApiResponse) result.getBody()).isSuccess());
-//        verify(userService, times(1)).updateUser(user);
-//    }
-//
+        // Crear un usuario de ejemplo
+        Users user = new Users.Builder()
+                .withFirstName("New")
+                .withLastName("User")
+                .withEmail("newuser@example.com")
+                .withRut("12345678-9")
+                .withPhone("9876543210")
+                .withAddress("New Address")
+                .withPassword("securepassword")
+                .withRol(role)
+                .build();
+
+        // Simular la respuesta del servicio
+        when(userService.createUser(user)).thenReturn(user);
+
+        // Llamar al método del controlador
+        Users result = userController.createUser(user);
+
+        // Verificaciones
+        assertNotNull(result); // Verifica que la respuesta no sea nula
+        assertEquals(user.getEmail(), result.getEmail()); // Verifica que los correos coincidan
+        assertEquals(user.getFirstName(), result.getFirstName()); // Verifica que los nombres coincidan
+        assertEquals(user.getLastName(), result.getLastName()); // Verifica que los apellidos coincidan
+        verify(userService, times(1)).createUser(user); // Verifica que el servicio fue llamado una vez
+    }
+
+
+
+    @Test
+    void updateUser_Successful() {
+        // Crear un rol de ejemplo
+        Rol role = new Rol.Builder()
+                .withNombre("User")
+                .withDescription("Regular user role")
+                .build();
+
+        // Crear un usuario existente de ejemplo
+        Users existingUser = new Users.Builder()
+                .withId(1L)
+                .withFirstName("Existing")
+                .withLastName("User")
+                .withEmail("existinguser@example.com")
+                .withRut("12345678-9")
+                .withPhone("9876543210")
+                .withAddress("Existing Address")
+                .withPassword("oldpassword")
+                .withRol(role)
+                .build();
+
+        // Crear un usuario actualizado de ejemplo
+        Users updatedUser = new Users.Builder()
+                .withId(1L)
+                .withFirstName("Updated")
+                .withLastName("User")
+                .withEmail("existinguser@example.com")
+                .withRut("12345678-9")
+                .withPhone("9876543210")
+                .withAddress("Updated Address")
+                .withPassword("newpassword")
+                .withRol(role)
+                .build();
+
+        // Simular el comportamiento del servicio
+        when(userService.updateUser(existingUser)).thenReturn(updatedUser);
+
+        // Llamar al método del controlador
+        Users result = userController.updateUser(existingUser);
+
+        // Verificaciones
+        assertNotNull(result);
+        assertEquals(updatedUser.getId(), result.getId());
+        assertEquals(updatedUser.getFirstName(), result.getFirstName());
+        assertEquals(updatedUser.getLastName(), result.getLastName());
+        assertEquals(updatedUser.getEmail(), result.getEmail());
+        assertEquals(updatedUser.getAddress(), result.getAddress());
+        assertEquals(updatedUser.getPassword(), result.getPassword());
+
+        // Verificar que el servicio fue llamado una vez
+        verify(userService, times(1)).updateUser(existingUser);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @Test
     void deleteUser_Successful() {
         // Crear un rol de ejemplo

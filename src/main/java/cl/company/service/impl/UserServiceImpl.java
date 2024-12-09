@@ -43,28 +43,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<Object> createUser(Users users) {
+    public Users createUser(Users users) {
 
-        if(!existsProductByName(users.getEmail())){
+        if (!existsProductByName(users.getEmail())) {
             Users userToSave = new Users.Builder()
-                                        .withFirstName(users.getFirstName())
-                                        .withLastName(users.getLastName())
-                                        .withRut(users.getRut())
-                                        .withEmail(users.getEmail())
-                                        .withPhone(users.getPhone())
-                                        .withAddress(users.getAddress())
-                                        .withPassword(users.getPassword())
-                                        .withRol(users.getRol())
-                                        .build();
-            Users createdUser = userRepository.save(userToSave);
-            return ResponseEntity.ok(createdUser);
-        }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("No se puedo crear el usuario,ya existe",false));
+                    .withFirstName(users.getFirstName())
+                    .withLastName(users.getLastName())
+                    .withRut(users.getRut())
+                    .withEmail(users.getEmail())
+                    .withPhone(users.getPhone())
+                    .withAddress(users.getAddress())
+                    .withPassword(users.getPassword())
+                    .withRol(users.getRol())
+                    .build();
+           return userRepository.save(userToSave);
+        } else {
+            return null;
         }
+
     }
 
     @Override
-    public ResponseEntity<Object> updateUser(Users users) {
+    public Users updateUser(Users users) {
         if(existsUserById(users.getId())){
             Users userToSave = new Users.Builder()
                                     .withId(users.getId())
@@ -77,10 +77,10 @@ public class UserServiceImpl implements UserService {
                                     .withPassword(users.getPassword())
                                     .withRol(users.getRol())
                                     .build();
-            Users createdUser = userRepository.save(userToSave);
-            return ResponseEntity.ok(createdUser);
+            return userRepository.save(userToSave);
+
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("No se puedo actualizar el usuario,no existe",false));
+            return null;
         }
     }
 

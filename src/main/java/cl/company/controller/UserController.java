@@ -6,6 +6,7 @@ import cl.company.model.Users;
 import cl.company.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.java.Log;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -69,27 +70,14 @@ public class UserController {
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<Object> createUser( @RequestBody Users users) throws MethodArgumentNotValidException {
+    public Users createUser(@RequestBody Users users)  {
 
-        if (users == null) {
-            log.info("Algunos de los parámetros no se ingresaron");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron",false));
-        }
-
-
-
-        return ResponseEntity.ok(userService.createUser(users));
+        return userService.createUser(users);
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<Object> updateUser(@RequestBody Users users) throws MethodArgumentNotValidException {
-
-        if (users == null) {
-            log.info("Algunos de los parámetros no se ingresaron");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse("Algunos de los parámetros no se ingresaron",false));
-        }
-
-        return ResponseEntity.ok(userService.updateUser(users));
+    public Users updateUser(@RequestBody Users users)  {
+        return userService.updateUser(users);
     }
 
     @DeleteMapping("/deleteUser/{email}")

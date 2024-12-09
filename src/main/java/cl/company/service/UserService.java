@@ -13,8 +13,8 @@ public interface UserService {
     ApiResponse login(String userName, String password);
     List<Users> findAll();
     Users findUser(String email);
-    ResponseEntity<Object> createUser(Users users);
-    ResponseEntity<Object> updateUser(Users users);
+    Users createUser(Users users);
+    Users updateUser(Users users);
     boolean existsProductByName(String username);
     boolean existsUserById(Long id);
     ResponseEntity<Object> deleteUser(String email);
