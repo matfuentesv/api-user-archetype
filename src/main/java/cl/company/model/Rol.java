@@ -29,15 +29,22 @@ public class Rol {
     public Rol() {}
 
     // Constructor privado para el Builder
-    private Rol(String name, String description) {
+    private Rol(Long id, String name, String description) {
+        this.id = id;
         this.name = name;
         this.description = description;
     }
 
     // Builder interno
     public static class Builder {
+        private Long  id;
         private String name;
         private String description;
+
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder withNombre(String name) {
             this.name = name;
@@ -50,7 +57,7 @@ public class Rol {
         }
 
         public Rol build() {
-            return new Rol(name, description);
+            return new Rol(id,name, description);
         }
     }
 }
