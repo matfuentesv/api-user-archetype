@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -159,6 +160,101 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findUserEmail(email);
         verify(userRepository, never()).deleteById(anyLong());
     }
+
+
+
+
+
+    @Test
+    void testFindAll_ReturnsListOfUsers() {
+        Users user1 = new Users.Builder()
+                .withId(1L)
+                .withEmail("user1@example.com")
+                .withFirstName("John")
+                .withLastName("Doe")
+                .build();
+
+        Users user2 = new Users.Builder()
+                .withId(2L)
+                .withEmail("user2@example.com")
+                .withFirstName("Jane")
+                .withLastName("Smith")
+                .build();
+
+        when(userRepository.findAll()).thenReturn(List.of(user1, user2));
+
+        var users = userService.findAll();
+
+        assertNotNull(users);
+        assertEquals(2, users.size());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testLambdaFindUser() {
+        String email = "test@example.com";
+        Users user = new Users.Builder()
+                .withId(1L)
+                .withEmail(email)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .build();
+
+        when(userRepository.findAll()).thenReturn(List.of(user));
+
+        var foundUser = userService.findAll()
+                .stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(foundUser);
+        assertEquals(email, foundUser.getEmail());
+        verify(userRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testFindUser_UserExists() {
+        // Datos de entrada
+        String email = "test@example.com";
+        Users existingUser = new Users.Builder()
+                .withId(1L)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .withEmail(email)
+                .build();
+
+        // Simulación del repositorio
+        when(userRepository.findUserEmail(email)).thenReturn(Optional.of(existingUser));
+
+        // Llamada al servicio
+        Users result = userService.findUser(email);
+
+        // Verificaciones
+        assertNotNull(result);
+        assertEquals(existingUser.getId(), result.getId());
+        assertEquals(existingUser.getEmail(), result.getEmail());
+        verify(userRepository, times(1)).findUserEmail(email);
+    }
+
+    @Test
+    void testFindUser_UserDoesNotExist() {
+        // Datos de entrada
+        String email = "nonexistent@example.com";
+
+        // Simulación del repositorio
+        when(userRepository.findUserEmail(email)).thenReturn(Optional.empty());
+
+        // Llamada al servicio
+        Users result = userService.findUser(email);
+
+        // Verificaciones
+        assertNotNull(result);
+        assertNull(result.getId()); // Comprobar que los valores son predeterminados
+        assertNull(result.getEmail());
+        verify(userRepository, times(1)).findUserEmail(email);
+    }
+
 
 
 }

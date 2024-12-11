@@ -164,5 +164,173 @@ public class ModelTests {
         assertEquals("Administrator role", role.getDescription());
     }
 
+    @Test
+    void testUsersToString() {
+        Rol role = new Rol();
+        role.setId(1L);
+        role.setName("Admin");
+        role.setDescription("Administrator role");
+
+        Users user = new Users.Builder()
+                .withId(1L)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .withRut("12345678-9")
+                .withEmail("johndoe@example.com")
+                .withPhone("9876543210")
+                .withAddress("123 Main St")
+                .withPassword("password123")
+                .withRol(role)
+                .build();
+
+        String expected = "Users{id=1, firstName='John', lastName='Doe', rut='12345678-9', email='johndoe@example.com', phone='9876543210', address='123 Main St', password='password123', rol=Rol(id=1, name=Admin, description=Administrator role)}";
+        assertEquals(expected, user.toString());
+    }
+
+    @Test
+    void testUsersEquals() {
+        Users user1 = new Users.Builder()
+                .withId(1L)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .withRut("12345678-9")
+                .withEmail("johndoe@example.com")
+                .withPhone("9876543210")
+                .withAddress("123 Main St")
+                .withPassword("password123")
+                .build();
+
+        Users user2 = new Users.Builder()
+                .withId(1L)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .withRut("12345678-9")
+                .withEmail("johndoe@example.com")
+                .withPhone("9876543210")
+                .withAddress("123 Main St")
+                .withPassword("password123")
+                .build();
+
+        Users user3 = new Users.Builder()
+                .withId(2L)
+                .withFirstName("Jane")
+                .withLastName("Smith")
+                .withRut("98765432-1")
+                .withEmail("janesmith@example.com")
+                .withPhone("1231231234")
+                .withAddress("456 Elm St")
+                .withPassword("password456")
+                .build();
+
+        // Verificar que user1 y user2 son iguales
+        assertEquals(user1, user2);
+
+        // Verificar que user1 y user3 son diferentes
+        assertNotEquals(user1, user3);
+    }
+
+    @Test
+    void testUsersHashCode() {
+        Users user1 = new Users.Builder()
+                .withId(1L)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .withRut("12345678-9")
+                .withEmail("johndoe@example.com")
+                .withPhone("9876543210")
+                .withAddress("123 Main St")
+                .withPassword("password123")
+                .build();
+
+        Users user2 = new Users.Builder()
+                .withId(1L)
+                .withFirstName("John")
+                .withLastName("Doe")
+                .withRut("12345678-9")
+                .withEmail("johndoe@example.com")
+                .withPhone("9876543210")
+                .withAddress("123 Main St")
+                .withPassword("password123")
+                .build();
+
+        Users user3 = new Users.Builder()
+                .withId(2L)
+                .withFirstName("Jane")
+                .withLastName("Smith")
+                .withRut("98765432-1")
+                .withEmail("janesmith@example.com")
+                .withPhone("1231231234")
+                .withAddress("456 Elm St")
+                .withPassword("password456")
+                .build();
+
+        // Verificar que user1 y user2 tienen el mismo hashCode
+        assertEquals(user1.hashCode(), user2.hashCode());
+
+        // Verificar que user1 y user3 tienen diferentes hashCode
+        assertNotEquals(user1.hashCode(), user3.hashCode());
+    }
+
+    @Test
+    void testRolEquals() {
+        Rol role1 = new Rol.Builder()
+                .withId(1L)
+                .withNombre("Admin")
+                .withDescription("Administrator role")
+                .build();
+
+        Rol role2 = new Rol.Builder()
+                .withId(1L)
+                .withNombre("Admin")
+                .withDescription("Administrator role")
+                .build();
+
+        Rol role3 = new Rol.Builder()
+                .withId(2L)
+                .withNombre("User")
+                .withDescription("Regular user role")
+                .build();
+
+        // Verificar que role1 y role2 son iguales
+        assertEquals(role1, role2);
+
+        // Verificar que role1 y role3 son diferentes
+        assertNotEquals(role1, role3);
+
+        // Verificar que role1 no es igual a null
+        assertNotEquals(role1, null);
+
+        // Verificar que role1 no es igual a un objeto de otra clase
+        assertNotEquals(role1, "Un String");
+    }
+
+    @Test
+    void testRolHashCode() {
+        Rol role1 = new Rol.Builder()
+                .withId(1L)
+                .withNombre("Admin")
+                .withDescription("Administrator role")
+                .build();
+
+        Rol role2 = new Rol.Builder()
+                .withId(1L)
+                .withNombre("Admin")
+                .withDescription("Administrator role")
+                .build();
+
+        Rol role3 = new Rol.Builder()
+                .withId(2L)
+                .withNombre("User")
+                .withDescription("Regular user role")
+                .build();
+
+        // Verificar que role1 y role2 tienen el mismo hashCode
+        assertEquals(role1.hashCode(), role2.hashCode());
+
+        // Verificar que role1 y role3 tienen diferentes hashCode
+        assertNotEquals(role1.hashCode(), role3.hashCode());
+    }
+
+
 
 }

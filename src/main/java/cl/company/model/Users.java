@@ -73,7 +73,7 @@ public class Users {
         this.rol = rol;
     }
 
-    // Builder interno
+
     public static class Builder {
         private Long id;
         private String firstName;
@@ -133,5 +133,20 @@ public class Users {
         public Users build() {
             return new Users(id, firstName, lastName, rut, email, phone, address, password, rol);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", rut='" + rut + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", password='" + password + '\'' +
+                ", rol=" + rol +
+                '}';
     }
 }
