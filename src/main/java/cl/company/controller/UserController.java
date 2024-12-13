@@ -22,7 +22,7 @@ import java.util.logging.Level;
 @RestController
 @RequestMapping("/api")
 @Log
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
